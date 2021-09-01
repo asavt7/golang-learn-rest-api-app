@@ -10,6 +10,14 @@ type AuthPostgres struct {
 	db *sqlx.DB
 }
 
+func (a *AuthPostgres) GetUser(username, password string) (domain.User,error) {
+	var user domain.User
+
+	query := fmt.Sprintf("SELECT * FROM %s WHERE username=$1 AND password_hash=$2", usersTable)
+	err := a.db.Get(&user, query, username, password)
+	return user, err
+}
+
 func NewAuthPostgres(db *sqlx.DB) *AuthPostgres {
 	return &AuthPostgres{db: db}
 }
