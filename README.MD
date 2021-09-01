@@ -24,4 +24,19 @@ docker exec -it $(docker ps -q) /usr/bin/psql -U postgres
 
 ```
 
+fix dirty migration
+```
+#connect to docker container and run psql
+docker exec -it $(docker ps -q) /usr/bin/psql -U postgres
+
+#fix table row (000001 - migration version )
+update schema_migrations set version='000001', dirty=false;
+
+```
+
+
+revert migration 
+```
+migrate -path ./schema/ -database 'postgres://postgres:password@localhost:5432/postgres?sslmode=disable' down
+```
 
