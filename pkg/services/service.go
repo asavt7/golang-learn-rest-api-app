@@ -1,8 +1,12 @@
 package services
 
-import "github.com/asavt7/todo/pkg/repos"
+import (
+	"github.com/asavt7/todo/pkg/domain"
+	"github.com/asavt7/todo/pkg/repos"
+)
 
 type Authorization interface {
+	CreateUser(user domain.User) (int, error)
 }
 
 type TodoList interface {
@@ -20,5 +24,7 @@ type Service struct {
 }
 
 func NewService(repo *repos.Repo) *Service {
-	return &Service{repo: repo}
+	return &Service{
+		Authorization: NewAuthService(repo.Authorization),
+		repo:          repo}
 }
