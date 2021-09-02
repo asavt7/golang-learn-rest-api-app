@@ -10,8 +10,8 @@ import (
 )
 
 func main() {
+	logrus.SetLevel(logrus.DebugLevel)
 	logrus.SetFormatter(new(logrus.JSONFormatter))
-
 	err := initConfig()
 	if err != nil {
 		logrus.Fatalf("error while init configs %s", err.Error())

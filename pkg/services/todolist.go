@@ -9,6 +9,10 @@ type TodoListService struct {
 	repo repos.TodoList
 }
 
+func (t *TodoListService) Update(userId int, listId int, input domain.UpdateTodoListInput) error {
+	return t.repo.Update(userId, listId, input)
+}
+
 func (t *TodoListService) Delete(userId, listId int) error {
 	return t.repo.Delete(userId, listId)
 }
