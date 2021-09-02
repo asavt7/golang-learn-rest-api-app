@@ -5,6 +5,7 @@ import (
 	"github.com/asavt7/todo/pkg/domain"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 func (h *Handler) createList(ctx *gin.Context) {
@@ -65,11 +66,26 @@ func (h *Handler) getAllLists(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, getAllListsResponse{Data: lists})
 
-
-
 }
 
 func (h *Handler) getListById(ctx *gin.Context) {
+	userId, err := getUserId(ctx)
+	if err != nil {
+		return
+	}
+
+	listId, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	list, err := h.service.TodoList.GetListById(userId, listId)
+	if err != nil {
+		NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+	ctx.JSON(http.StatusOK, list)
 
 }
 
