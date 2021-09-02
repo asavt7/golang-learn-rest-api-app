@@ -10,6 +10,14 @@ type TodoRepoPostgres struct {
 	db *sqlx.DB
 }
 
+func (t *TodoRepoPostgres) Delete(userId int, itemId int) error {
+
+	query := fmt.Sprintf("DELETE FROM %s ti USING %s li , %s ul WHERE ti.id=li.item_id AND ul.list_id=li.list_id AND  ul.user_id=$1 AND ti.id=$2", todoItemsTable, listsItemTable, userListsTable)
+
+	_, err := t.db.Exec(query, userId, itemId)
+	return err
+}
+
 func (t *TodoRepoPostgres) GetById(userId int, itemId int) (domain.TodoItem, error) {
 	query := fmt.Sprintf("SELECT ti.* FROM %s ti INNER JOIN %s li ON ti.id=li.item_id  INNER JOIN %s ul ON ul.list_id=li.list_id WHERE ul.user_id=$1 AND ti.id=$2", todoItemsTable, listsItemTable, userListsTable)
 	var result domain.TodoItem

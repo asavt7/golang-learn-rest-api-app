@@ -10,6 +10,10 @@ type TodoItemService struct {
 	listRepo repos.TodoList
 }
 
+func (t *TodoItemService) Delete(userId int, itemId int) error {
+	return t.repo.Delete(userId , itemId )
+}
+
 func (t *TodoItemService) GetById(userId int, itemId int) (domain.TodoItem, error) {
 	return t.repo.GetById(userId , itemId )
 }

@@ -93,5 +93,23 @@ func (h *Handler) updateItem(ctx *gin.Context) {
 }
 
 func (h *Handler) deleteItem(ctx *gin.Context) {
+	userId, err := getUserId(ctx)
+	if err != nil {
+		return
+	}
 
+	itemId, err := strconv.Atoi(ctx.Param("item_id"))
+	if err != nil {
+		NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	err = h.service.TodoItem.Delete(userId, itemId)
+	if err != nil {
+		NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	ctx.Status(http.StatusOK)
+	return
 }
