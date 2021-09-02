@@ -43,6 +43,13 @@ func (h *Handler) InitRoutes() *gin.Engine {
 				items.DELETE("/:item_id", h.deleteItem)
 			}
 		}
+
+		itemsDirect := api.Group("/items")
+		{
+			itemsDirect.GET("/:item_id", h.getItemById)
+			itemsDirect.PUT("/:item_id", h.updateItem)
+			itemsDirect.DELETE("/:item_id", h.deleteItem)
+		}
 	}
 	return router
 }

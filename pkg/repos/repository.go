@@ -18,6 +18,7 @@ type TodoList interface {
 type TodoItem interface {
 	Create(listId int, input domain.TodoItem) (int, error)
 	GetAllItems(userId int, listId int) ([]domain.TodoItem, error)
+	GetById(userId int, itemId int) (domain.TodoItem, error)
 }
 
 type Repo struct {

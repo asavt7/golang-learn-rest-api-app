@@ -10,6 +10,10 @@ type TodoItemService struct {
 	listRepo repos.TodoList
 }
 
+func (t *TodoItemService) GetById(userId int, itemId int) (domain.TodoItem, error) {
+	return t.repo.GetById(userId , itemId )
+}
+
 func (t *TodoItemService) GetAllItems(userId int, listId int) ([]domain.TodoItem, error) {
 	return t.repo.GetAllItems(userId, listId)
 
