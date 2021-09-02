@@ -6,8 +6,13 @@ import (
 )
 
 type TodoItemService struct {
-	repo repos.TodoItem
+	repo     repos.TodoItem
 	listRepo repos.TodoList
+}
+
+func (t *TodoItemService) GetAllItems(userId int, listId int) ([]domain.TodoItem, error) {
+	return t.repo.GetAllItems(userId, listId)
+
 }
 
 func NewTodoItemService(repo repos.TodoItem, listRepo repos.TodoList) *TodoItemService {
@@ -19,11 +24,6 @@ func (t *TodoItemService) Create(userId int, listId int, input domain.TodoItem) 
 	if err != nil {
 		return 0, err
 	}
-	
-	return t.repo.Create(listId,input)
+
+	return t.repo.Create(listId, input)
 }
-
-
-
-
-

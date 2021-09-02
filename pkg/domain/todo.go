@@ -28,10 +28,10 @@ type UserList struct {
 }
 
 type TodoItem struct {
-	Id          ID     `json:"id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Done        bool
+	Id          ID     `json:"id" db:"id"`
+	Title       string `json:"title" db:"title" binding:"required" test:"yesTest"`
+	Description string `json:"description" db:"description"`
+	Done        bool   `json:"done" db:"done"`
 }
 
 type TodoListItem struct {
