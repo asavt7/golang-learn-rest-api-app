@@ -95,4 +95,21 @@ func (h *Handler) updateList(ctx *gin.Context) {
 
 func (h *Handler) deleteList(ctx *gin.Context) {
 
+	userId, err := getUserId(ctx)
+	if err != nil {
+		return
+	}
+
+	listId, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	err = h.service.TodoList.Delete(userId, listId)
+	if err != nil {
+		NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+	ctx.Status(http.StatusOK)
 }

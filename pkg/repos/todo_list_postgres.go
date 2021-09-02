@@ -4,10 +4,19 @@ import (
 	"fmt"
 	"github.com/asavt7/todo/pkg/domain"
 	"github.com/jmoiron/sqlx"
+	"github.com/sirupsen/logrus"
 )
 
 type TodoListPostgres struct {
 	db *sqlx.DB
+}
+
+func (t *TodoListPostgres) Delete(userId int, listId int) error {
+	query := fmt.Sprintf("DELETE FROM %s l USING %s ul WHERE l.id = ul.list_id AND ul.user_id=$1 AND ul.id=$2", todoListsTable, userListsTable)
+	result, err := t.db.Exec(query, userId, listId)
+
+	logrus.Info(result)
+	return err
 }
 
 func (t *TodoListPostgres) GetListById(userId int, listId int) (domain.TodoList, error) {
