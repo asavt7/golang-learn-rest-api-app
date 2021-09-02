@@ -4,10 +4,46 @@ import (
 	"fmt"
 	"github.com/asavt7/todo/pkg/domain"
 	"github.com/jmoiron/sqlx"
+	"github.com/sirupsen/logrus"
+	"strings"
 )
 
 type TodoRepoPostgres struct {
 	db *sqlx.DB
+}
+
+func (t *TodoRepoPostgres) Update(userId int, itemId int, input domain.UpdateTodoItem) error {
+	setValues := make([]string, 0)
+	args := make([]interface{}, 0)
+	argId := 1
+
+	if input.Title != nil {
+		setValues = append(setValues, fmt.Sprintf("title=$%d", argId))
+		args = append(args, *input.Title)
+		argId++
+	}
+	if input.Description != nil {
+		setValues = append(setValues, fmt.Sprintf("description=$%d", argId))
+		args = append(args, *input.Description)
+		argId++
+	}
+	if input.Done != nil {
+		setValues = append(setValues, fmt.Sprintf("done=$%d", argId))
+		args = append(args, *input.Done)
+		argId++
+	}
+
+	setQuery := strings.Join(setValues, ", ")
+
+	query := fmt.Sprintf("UPDATE %s ti SET %s FROM %s li, %s ul WHERE ti.id=li.item_id AND li.list_id=ul.list_id AND ul.user_id=$%d AND ti.id=$%d", todoItemsTable, setQuery, listsItemTable, userListsTable, argId, argId+1)
+
+	args = append(args, userId, itemId)
+	logrus.Debugf("todo item update sql: %s", query)
+	logrus.Debugf("args: %s", args)
+
+	_, err := t.db.Exec(query, args...)
+	return err
+
 }
 
 func (t *TodoRepoPostgres) Delete(userId int, itemId int) error {

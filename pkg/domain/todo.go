@@ -34,6 +34,19 @@ type TodoItem struct {
 	Done        bool   `json:"done" db:"done"`
 }
 
+type UpdateTodoItem struct {
+	Title       *string `json:"title" `
+	Description *string `json:"description"`
+	Done        *bool   `json:"done"`
+}
+
+func (u *UpdateTodoItem) Validate() error {
+	if u.Title == nil && u.Description == nil && u.Done == nil {
+		return errors.New("update input has no values")
+	}
+	return nil
+}
+
 type TodoListItem struct {
 	Id         ID
 	TodoListId ID

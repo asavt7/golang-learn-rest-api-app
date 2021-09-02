@@ -90,6 +90,39 @@ func (h *Handler) getItemById(ctx *gin.Context) {
 
 func (h *Handler) updateItem(ctx *gin.Context) {
 
+	userId, err := getUserId(ctx)
+	if err != nil {
+		return
+	}
+
+	itemId, err := strconv.Atoi(ctx.Param("item_id"))
+	if err != nil {
+		NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	var input domain.UpdateTodoItem
+	err = ctx.BindJSON(&input)
+	if err != nil {
+		NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	err = input.Validate()
+	if err != nil {
+		NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	err = h.service.TodoItem.Update(userId, itemId, input)
+	if err != nil {
+		NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	ctx.Status(http.StatusOK)
+	return
+
 }
 
 func (h *Handler) deleteItem(ctx *gin.Context) {
