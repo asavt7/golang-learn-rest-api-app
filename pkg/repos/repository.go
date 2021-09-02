@@ -16,6 +16,7 @@ type TodoList interface {
 }
 
 type TodoItem interface {
+	Create(listId int, input domain.TodoItem) (int, error)
 }
 
 type Repo struct {

@@ -36,6 +36,7 @@ func NewPostgresRepo(db *sqlx.DB) *Repo {
 	return &Repo{
 		Authorization: NewAuthPostgres(db),
 		TodoList : NewTodoListPostgres(db),
+		TodoItem : NewTodoRepoPostgres(db),
 	}
 }
 
