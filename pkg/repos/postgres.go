@@ -35,5 +35,8 @@ func NewPostgreDb(cfg Config) (*sqlx.DB, error) {
 func NewPostgresRepo(db *sqlx.DB) *Repo {
 	return &Repo{
 		Authorization: NewAuthPostgres(db),
+		TodoList : NewTodoListPostgres(db),
 	}
 }
+
+

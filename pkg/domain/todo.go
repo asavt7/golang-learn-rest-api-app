@@ -4,7 +4,7 @@ type ID int
 
 type TodoList struct {
 	Id          ID     `json:"id"`
-	Title       string `json:"title"`
+	Title       string `json:"title" binding:"required"`
 	Description string `json:"description"`
 }
 
