@@ -10,6 +10,17 @@ type TodoListPostgres struct {
 	db *sqlx.DB
 }
 
+func (t *TodoListPostgres) GetAllLists(userId int) ([]domain.TodoList, error) {
+
+	var lists []domain.TodoList
+	query := fmt.Sprintf("SELECT l.id, l.title, l.description FROM %s l INNER JOIN %s ul ON l.id = ul.list_id WHERE ul.user_id=$1", todoListsTable, userListsTable)
+	err := t.db.Select(&lists, query, userId)
+	if err != nil {
+		return nil, err
+	}
+	return lists, nil
+}
+
 func NewTodoListPostgres(db *sqlx.DB) *TodoListPostgres {
 	return &TodoListPostgres{db: db}
 }

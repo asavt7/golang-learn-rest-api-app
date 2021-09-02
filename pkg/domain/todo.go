@@ -3,15 +3,15 @@ package domain
 type ID int
 
 type TodoList struct {
-	Id          ID     `json:"id"`
-	Title       string `json:"title" binding:"required"`
-	Description string `json:"description"`
+	Id          ID     `json:"id" db:"id"`
+	Title       string `json:"title" binding:"required" db:"title"`
+	Description string `json:"description" db:"description"`
 }
 
 type UserList struct {
-	Id         ID
-	UserId     ID
-	TodoListId ID
+	Id         ID `db:"id"`
+	UserId     ID `db:"user_id"`
+	TodoListId ID `db:"list_id"`
 }
 
 type TodoItem struct {

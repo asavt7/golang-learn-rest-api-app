@@ -47,7 +47,25 @@ func getUserId(ctx *gin.Context) (int, error) {
 	return idInt, nil
 }
 
+type getAllListsResponse struct {
+	Data []domain.TodoList `json:"data"`
+}
+
 func (h *Handler) getAllLists(ctx *gin.Context) {
+	id, err := getUserId(ctx)
+	if err != nil {
+		return
+	}
+
+	lists, err := h.service.TodoList.GetAllLists(id)
+	if err != nil {
+		NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	ctx.JSON(http.StatusOK, getAllListsResponse{Data: lists})
+
+
 
 }
 
